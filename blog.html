@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>猫姐的游戏仓库</title>
     <style>
         body {
@@ -192,6 +192,34 @@
             flex-direction: row;
             width: 100%;
         }
+        /* 添加媒体查询，当屏幕宽度小于 768px 时应用以下样式 */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; /* 隐藏侧边栏 */
+            }
+            .content {
+                max-width: 100%; /* 内容区域占满屏幕宽度 */
+                margin-left: 0; /* 移除左侧边距 */
+            }
+            .header {
+                margin-left: 0; /* 移除头部左侧边距 */
+            }
+            .chapter {
+                margin-left: 0; /* 移除章节左侧边距 */
+            }
+            .top-nav {
+                font-size: 1rem; /* 减小顶部导航字体大小 */
+            }
+            .header h1 {
+                font-size: 1.8rem; /* 减小标题字体大小 */
+            }
+            .header p {
+                font-size: 1.6rem; /* 减小副标题字体大小 */
+            }
+            .chapter h2 {
+                font-size: 1.4rem; /* 减小章节标题字体大小 */
+            }
+        }
     </style>
     <!-- 数学公式渲染 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -235,8 +263,7 @@
         </div>
         <div class="content">
             <div class="header">
-                <!-- <h1>源起</h1> -->
-                <!-- <p>Chapter 1 算法基础</p> -->
+
             </div>
             <div class="chapter" id="chapter0">
                 <h2>第0章：为什么这与这些游戏</h2>
@@ -249,17 +276,11 @@
 
                 <div class="code-block">
                     <pre><code class="python">
-<!--def fibonacci(n):-->
-<!--    if n <= 1:-->
-<!--        return n-->
-<!--    return fibonacci(n-1) + fibonacci(n-2)-->
+
                     </code></pre>
                 </div>
 
                 <div class="math-formula">
-<!--                   斐波那契数列的通项公式为：<br>-->
-<!--                    \[ F(n) = \frac{\phi^n - \psi^n}{\sqrt{5}} \]-->
-<!--                    其中 \(\phi = \frac{1+\sqrt{5}}{2}\) 是黄金分割比。-->
                 </div>
 
                 <img src="https://via.placeholder.com/600x300?text=算法流程图" alt="算法流程图">
@@ -278,53 +299,6 @@ print(stack.pop())  # 输出: 2
                     </code></pre>
                 </div>
             </div>
-
-<!--            <div class="chapter" id="chapter3">-->
-<!--                <h2>第3章：排序算法</h2>-->
-<!--                <p>排序算法用于将数据按照一定顺序排列。常见的排序算法包括冒泡排序、快速排序和归并排序。</p>-->
-<!--                <p>以下是一个简单的冒泡排序实现：</p>-->
-<!--                <div class="code-block">-->
-<!--                    <pre><code class="python">-->
-<!--def bubble_sort(arr):-->
-<!--    n = len(arr)-->
-<!--    for i in range(n):-->
-<!--        for j in range(0, n-i-1):-->
-<!--            if arr[j] > arr[j+1]):-->
-<!--                arr[j], arr[j+1] = arr[j+1], arr[j]-->
-<!--                    </code></pre>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="chapter" id="chapter4">-->
-<!--                <h2>4.1 图算法</h2>-->
-<!--                <p>图算法用于解决图结构中的问题，例如最短路径、最小生成树等。</p>-->
-<!--                <p>以下是一个简单的深度优先搜索（DFS）实现：</p>-->
-<!--                <div class="code-block">-->
-<!--                    <pre><code class="python">-->
-<!--def dfs(graph, node, visited):-->
-<!--    if node not in visited:-->
-<!--        visited.add(node)-->
-<!--        for neighbor in graph[node]:-->
-<!--            dfs(graph, neighbor, visited)-->
-<!--                    </code></pre>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="chapter" id="chapter5">-->
-<!--                <h2>5.1 动态规划</h2>-->
-<!--                <p>动态规划是一种通过将问题分解为子问题并存储其结果来提高效率的算法设计方法。</p>-->
-<!--                <p>以下是一个计算斐波那契数列的动态规划实现：</p>-->
-<!--                <div class="code-block">-->
-<!--                    <pre><code class="python">-->
-<!--def fibonacci_dp(n):-->
-<!--    dp = [0, 1]-->
-<!--    for i in range(2, n+1):-->
-<!--        dp.append(dp[i-1] + dp[i-2])-->
-<!--    return dp[n]-->
-<!--                    </code></pre>-->
-<!--                </div>-->
-<!--            </div>-->
-
             <div class="footer">
                 <p>版权所有 © 2025 猫姐</p>
                 <!-- <p>Powered by <a href="#"></a></p> -->
