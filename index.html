@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>猫姐的游戏仓库</title>
+<style>
+        body {
+            display: flex;
+            flex-direction: column; /* Change to column layout for banner */
+            font-family: 'Noto Sans', sans-serif;
+            max-width: 100%; /* Use full width */
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-color: #ffffff;
+            color: #333333;
+            overflow-x: hidden; /* Prevent horizontal scrolling issues */
+        }
+        .header {
+            text-align: left;
+            margin: 5px 0;
+            padding: 10px 0;
+            border-bottom: 2px solid #4CAF50;
+            margin-left: -40px; /* Add left margin */
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            color: #4CAF50;
+        }
+        .header p {
+            font-size: 2rem;
+            color: #666666;
+        }
+        .chapter {
+            margin: 20px 0px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            scroll-margin-top: 60px; /* Offset to account for the height of the sticky top-nav */
+            margin-left: 20px; /* Add left margin */
+        }
+        .chapter h2 {
+             margin-top: 0px;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        .chapter pre code {
+            font-size: 1.2rem;
+            border-radius: 5px;
+    }
+        .code-block {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            border: 1px solid #dddddd;
+        }
+        .math-formula {
+            text-align: center;
+            margin: 20px 0;
+            font-style: italic;
+            color: #555555;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 5px;
+            border: 1px solid #dddddd;
+        }
+        .footer {
+            text-align: center;
+            padding: 0px 0; /* Reduce padding to make the footer height smaller */
+            background-color: #1a1919; /* Match footer to banner */
+            color: #ffffff;
+            font-size: 0.9rem;
+            position: fixed; /* Make it fixed */
+            bottom: 0; /* Stick to the bottom of the viewport */
+            left: 0; /* Align with the left edge */
+            width: 100%; /* Ensure it spans the full width */
+            z-index: 1200; /* Ensure it stays above the sidebar */
+        }
+        .footer a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .sidebar {
+            width: 220px; /* Slightly wider sidebar */
+            background-color: #e3f9da; /* Very light orange for the sidebar background */
+            color: #0000FF; /* Blue for the sidebar text */
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed; /* Make the sidebar fixed */
+            top: 0; /* Stick to the top of the viewport */
+            left: 0; /* Stick to the left of the viewport */
+            z-index: 1000; /* Ensure it stays below the footer */
+        }
+        .sidebar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #69040b; /* Blue for the underline */
+            padding-bottom: 5px;
+            color: #8B0000; /* Deep red for "目录" */
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 20px 0 0; /* Add top padding to avoid overlap with the sticky top-nav */
+        }
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            color: #000000; /* Black for the links */
+            font-weight: bold; /* Make the links bold */
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+        .sidebar ul li a.active {
+            color: #7f08a4; /* Blue for the active link */
+        }
+        .content {
+            flex: 1; /* Take up remaining space */
+            padding: 20px;  
+            max-width: calc(100% - 250px); /* Adjust for sidebar width */
+            margin-top: 5px; /* Add margin to avoid overlap with the sticky top-nav */
+            margin-left: 270px; /* Adjust for the fixed sidebar width */
+            padding-bottom: 50px; /* Add padding to avoid content being hidden behind the fixed footer */
+        }
+        .top-nav {
+            text-align: left;
+            font-size: 1.20rem; /* Smaller font size */
+            font-weight: bold;
+            padding: 5px 20px; /* Minimized top and bottom padding */
+            background-color: #302f2f; /* Black background */
+            color: #f3f997; /* White text */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Ensure it spans the full width */
+            position: fixed; /* Ensure it remains sticky */
+            top: 0; /* Stick to the top of the viewport */
+            z-index: 1100; /* Ensure it stays above the sidebar */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-icon {
+            position: relative;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        .menu-icon div {
+            width: 25px;
+            height: 3px;
+            background-color: #f3f997;
+            margin: 4px 10px;
+        }
+        .qr-code {
+            position: fixed; /* Center in the viewport */
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust for true center */
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1300; /* Ensure it stays above all other elements */
+        }
+        .qr-code img {
+            display: block; /* Ensure the image is fully visible */
+            width: auto; /* Use the image's original width */
+            height: auto; /* Use the image's original height */
+            max-width: none; /* Remove any max-width restrictions */
+        }
+        .menu-icon:hover .qr-code {
+            display: flex;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+    </style>
+<!-- 数学公式渲染 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- 代码高亮 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebarLinks = document.querySelectorAll(".sidebar ul li a");
+            sidebarLinks.forEach(link => {
+                link.addEventListener("click", function () {
+                    // Remove 'active' class from all links
+                    sidebarLinks.forEach(l => l.classList.remove("active"));
+                    // Add 'active' class to the clicked link
+                    this.classList.add("active");
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="top-nav">
+        猫姐的游戏仓库
+        <div class="menu-icon">
+<div></div>
+<div></div>
+<div></div>
+<div class="qr-code">
+<img alt="QR Code" src="./douyin.png"/>
+</div>
+</div>
+</div>
+<div class="main-container">
+<div class="sidebar">
+<ul>
+<li><a href="#chapter0">第0章：为什么写这些游戏</a></li>
+<li><a href="#chapter1">第1章：这些年写过的游戏集合</a></li>
+<li><a href="#chapter2">第2章：写在最后</a></li>
+</ul>
+</div>
+<div class="content">
+<div class="header">
+<!-- <h1>源起</h1> -->
+<!-- <p>Chapter 1 算法基础</p> -->
+</div>
+<div class="chapter" id="chapter0">
+
+
+<h1>第0章：为什么写这些游戏</h1>
+<h2>1. 做这个游戏集合的初衷</h2>
+<ol>
+<li>在如今这个充满科技魅力的时代，孩子们的生活中到处都有电子设备的身影。身为关心孩子成长的一员，我一直思索着，如何让孩子们在享受科技带来欢乐的同时，还能收获知识与成长。经过大量观察，我发现市面上游戏虽多，可真正适合孩子们，既能让他们玩得开心，又能学到东西的优质游戏集合却很少。</li>
+<li>我深知，孩子们在成长的不同阶段，有着各种各样的发展需求。就像低龄的小朋友，他们正处在认识世界的基础阶段，对拼音、数字、汉字充满好奇，急需有趣的方式来开启认知大门；稍大一点的孩子，则需要提升英语能力、锻炼逻辑思维，为学习生活打下更坚实的基础。 同时，所有孩子都需要通过游戏来锻炼反应速度、手眼协调能力以及专注力，这些能力对他们的未来至关重要。</li>
+<li>出于对孩子们成长的深切关怀，我精心打造了这个游戏集合。这里面的每一款游戏，从设计到挑选，都饱含着对孩子们的期望。比如 “拼音游戏”，能帮助一年级的小宝轻松掌握拼音字母组合；“数字消消乐”，可以让小朋友在欢乐消除中强化数字认知；“外研单词通”，通过闯关模式激发孩子学习英语单词的兴趣。还有锻炼反应能力的 “愤怒的小鸟复刻游戏”，培养策略思维的 “快乐四子棋” 等等。</li>
+<li>我衷心希望，借助这个游戏集合，孩子们能在一个个充满趣味的游戏世界里尽情遨游， 快乐地探索知识，不断提升自身能力，真正做到在玩耍中学习，在学习中收获快乐，茁壮成长。</li>
+</ol></div>
+<div class="chapter" id="chapter1">
+
+
+
+
+
+<h1>第1章：这些年写过的游戏集合</h1>
+<p>欢迎来到猫姐的游戏仓库！在这里，我会为大家详细介绍各类游戏知识。我整理了多年来创作的游戏集合，不仅会说明创作这些游戏的初衷，还会阐述每个游戏的功能特点。同时，会附上各个游戏在仓库中的地址，方便大家深入了解与体验。</p>
+<h2>游戏1：自动播放单词</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">自动播放单词游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>助力自家孩子培养每日学习英语单词的良好习惯。借助吃饭前这段碎片化时间，安排孩子每天诵读5个单词，实现词汇量的稳步积累。</li>
+<li>以游戏形式激发孩子学习英语的兴趣，将原本枯燥的单词学习变得轻松愉悦，降低孩子对学习的抗拒心理。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li><strong>幻灯片自动播放模式</strong>：<ul>
+<li>单词如同幻灯片般依次自动呈现，每个单词在屏幕上持续显示5秒后，自动跳转至下一个单词。</li>
+<li>具备静音与发音两种播放模式。静音模式下，孩子能够集中精力进行单词的视觉记忆；发音模式则提供标准的朗读，通过视觉与听觉的双重刺激，加深孩子对单词的记忆。</li>
+</ul>
+</li>
+<li><strong>手动模式</strong>：<ul>
+<li>每按下一次操作按键，游戏便会对当前展示的单词进行发音。</li>
+<li>通过按键操作可便捷地切换至下一个单词，让孩子能够依据自身的学习节奏，针对重点单词开展有针对性的学习或练习。 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>游戏2：拼音拼读</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/han_zi_game">拼音拼读游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>助力小宝增加识字量。</li>
+<li>借助拼音与汉字结合的方式学习，提升小宝对汉字的认知水平。</li>
+<li>提升小宝的拼音拼读能力，以寓教于乐的形式促进语言学习和知识积累。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li><strong>学习模式</strong>：设置一系列关卡，选择关卡进入对应拼音拼读学习场景。点击汉字和拼音区域，系统发出精准标准的对应读音，辅助小宝熟悉拼音和汉字发音，为识字和阅读打基础。</li>
+<li><strong>挑战模式</strong>：界面上方显示拼音内容，点击可发音，下方呈现 4 个汉字选项。小宝需从选项中准确选出与上方拼音匹配的正确汉字，检验对拼音和汉字的掌握程度，强化学习效果，提升实际应用能力。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏3：天上掉金币</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/planebattle_coins​">天上掉金币游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：以实战形式向大家展示如何利用<strong>Python</strong>结合<strong>Pygame</strong>开发游戏，让学习者在实际案例中掌握相关编程知识与技能，同时为玩家提供趣味性的游戏体验。​</p>
+</li>
+<li>
+<p><strong>游戏功能</strong>：​</p>
+<ul>
+<li>金币会在屏幕上随机的位置生成，并持续从上往下掉落。​</li>
+<li>当游戏中的飞行员与金币发生碰撞时，金币会立即消失，与此同时玩家的得分会增加 1 分。​</li>
+<li>一旦飞行员与炸弹碰撞，游戏即刻结束，以此增加游戏的挑战性与紧张感。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏4：外研单词通</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/englishgame​​">外研单词通</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>利用闯关模式激发小朋友学习英语单词的兴趣，引导他们主动扩充词汇量。​</li>
+<li>通过单词发音环节，锻炼小朋友的听力感知能力，提升对英语语音语调的敏感度。​</li>
+<li>借助释义选择检验理解，在挑战失败后的学习模式中巩固知识，全方位提升英语综合素养。​</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：​</p>
+<ul>
+<li><strong>学习模式</strong>：在小朋友挑战失败后开启，为小朋友提供学习巩固的机会，帮助其掌握在挑战中未理解的单词。</li>
+<li><strong>挑战模式​</strong>：<ul>
+<li>设有众多关卡，点击关卡即可进入相应单词学习页面。​</li>
+<li>点击单词会发音，且需连续发音三次，强化小朋友对单词发音的聆听记忆。​</li>
+<li>发音结束后，下方会出现四个释义选项，小朋友需要从中选择正确的意思，以此检验对单词的理解程度。​</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>游戏5：拼音游戏</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/pinyingame​​">拼音游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>助力一年级小宝熟练掌握 63 个拼音字母及其组合，提升拼音认读能力。</li>
+<li>培养小宝对拼音学习的兴趣，改变枯燥的学习方式，让学习过程更具趣味性。</li>
+<li>通过游戏关卡训练，增强小宝的反应能力和判断能力，使其能快速、准确地识别正确拼音。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：​</p>
+<ul>
+<li><strong>学习模式</strong>：设有多个关卡，在每个关卡中，小宝可以系统地学习不同拼音字母组合的发音、书写规范等知识，帮助小宝逐步熟悉和掌握各类拼音内容。</li>
+<li><strong>挑战模式​</strong>：同样设置了相应关卡。在关卡中，点击喇叭会发出读音，下方会出现多个拼音选项，小宝需要从中选择发音与所点击拼音一致的选项，以此检验对拼音发音的掌握程度，提升拼音识别能力。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏6：快乐的键盘侠</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/funny_keyboard​​">快乐的键盘侠</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>帮助大宝快速掌握26个字母的盲打技巧，提升打字熟练度和准确性。</li>
+<li>通过趣味性的游戏方式，培养大宝对键盘操作的兴趣，让学习过程不再枯燥。</li>
+<li>在游戏过程中锻炼大宝的反应能力和手眼协调能力，使其能更灵活地应对键盘输入任务。</li>
+<li>增强大宝在限时环境下的专注度和应对压力的能力，提高在实际应用场景中使用键盘的效率。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li><strong>娱乐模式</strong>:<ul>
+<li>需要将所有飞过来的小鸟都成功 “干掉”。在这个模式中，小鸟会从屏幕右侧向左侧飞行，如果有小鸟飞到最左边，游戏即宣告失败。</li>
+<li>此模式重点在于追求稳和准，不能一味求快，需要精准地输入小鸟身上的字母，以此锻炼我们对字母的识别和键盘操作的准确性。</li>
+</ul>
+</li>
+<li><strong>训练模式</strong>：<ul>
+<li>该模式类似训练场，即使有小鸟漏掉飞走也不会影响游戏进程。</li>
+<li>主要目标是在较短时间内尽可能多地 “干掉” 小鸟，通过不断的练习，帮助玩家提升键盘盲打的速度。游戏过程趣味性强，能让玩家在轻松的氛围中提高打字技能。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>游戏7：战机打数字益智游戏</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/fire-digit​">战机打数字益智游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>巩固小朋友的20以内加减法基础，强化运算能力，让小朋友对加减法的运算更加熟练。</li>
+<li>锻炼小朋友的反应速度，在有限时间内快速思考并做出判断，提升思维敏捷性。</li>
+<li>通过有趣的游戏形式，激发小朋友对数学学习的兴趣，培养主动学习的习惯。</li>
+<li>提升小朋友的专注力，在战机移动、躲避障碍和寻找正确答案的过程中，锻炼其集中注意力的能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li>操作控制：玩家操控飞行员驾驶战机，可实现上下左右自由移动，灵活躲避障碍并调整射击角度。</li>
+<li>算式与答案呈现：飞机上会展示算式，同时屏幕左边呈现20以内的加减法算式，为玩家提供计算题目。</li>
+<li>得分与提示机制：当战机发射的子弹击中正确的数字答案，游戏进入下一题算式答题，同时播放 “你真棒” 的提示音，玩家得分加1鼓励小朋友积极思考并答对题目。</li>
+<li>错误反馈：若飞机碰到错误答案或陨石，飞机就会闪烁，玩家的星星数量掉1颗，提示玩家操作失误，增强游戏的紧张感和挑战性。</li>
+<li>时间限制与刷新机制：在30秒内没有选择正确答案，倒计时重新置为29秒，同时算式会重新刷新，促使玩家加快思考速度，提高答题效率。</li>
+<li>游戏结束条件：当星星数量掉为0时，游戏结束，让小朋友清楚了解游戏进程和结果。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏8：“地上100层” 游戏</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/funny_jump​">快乐的键盘侠</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>锻炼小朋友的手指灵活程度，通过操作左右键和空格键，让小朋友的手指在游戏过程中得到充分的协调性训练，提升手眼脑的协作能力。</li>
+<li>激发小朋友的竞争意识，游戏记录最高分的机制，能鼓励小朋友不断挑战自我，追求更高分数，在竞争中提升自身能力。</li>
+<li>以大宝的卡通形象作为游戏人物，增加游戏的亲切感和趣味性，吸引小朋友参与，同时也为小朋友创造一个充满个人特色的游戏体验空间。</li>
+<li>培养小朋友的反应能力和应变能力，在游戏过程中，小朋友需要快速应对各种可能出现的情况，比如躲避火焰，从而提高他们在现实生活中的反应速度和应对突发状况的能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li>游戏指引：游戏页面设置游戏攻略，为初次接触游戏的小朋友提供清晰的玩法指导，帮助他们快速上手，降低游戏难度门槛。</li>
+<li>游戏启动：玩家按任意键即可进入游戏，操作简单便捷，能迅速开启游戏体验。</li>
+<li>操作控制：玩家通过左右键控制游戏人物左右移动，配合空格键实现人物向上跳跃，这种操作方式既容易理解又具有一定的挑战性，能有效锻炼小朋友手指的灵活性。</li>
+<li>得分显示：游戏界面上方实时显示得分，让玩家随时了解自己的游戏成绩，增加游戏的紧张感和趣味性，同时也为玩家提供了明确的目标导向，激励他们不断争取更高分数。</li>
+<li>游戏结束条件：当游戏人物落入火中时，游戏立即结束。这种设定增加了游戏的紧张刺激感，要求玩家在游戏过程中时刻保持警惕，提高专注度。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏9：“快乐四子棋” 游戏</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/happy_connect_four​">“快乐四子棋” 游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>重温经典：让玩家重拾经典四子棋的乐趣，感受传统棋类游戏的魅力，唤起对经典游戏玩法的美好回忆。</li>
+<li>培养策略思维：在游戏过程中，玩家需要思考每一步棋子的落点，预测对手的行动，从而培养逻辑思维和策略规划能力。这种思维训练有助于玩家在日常生活和学习中更好地分析问题、解决问题。</li>
+<li>增进亲子或伙伴互动：以大宝和小宝的卡通形象作为游戏角色，增加了游戏的趣味性和亲近感，特别适合亲子之间或者小伙伴们一起游玩，促进彼此之间的交流、互动与情感沟通。</li>
+<li>提升专注力：游戏过程需要玩家集中注意力，关注棋局的变化，在思考策略和观察对手行动的过程中，锻炼玩家的专注力和耐心。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li>角色设定：游戏中有两个角色，分别以大宝和小宝的卡通形象呈现，为游戏增添趣味性和独特风格。</li>
+<li>轮流落子：游戏遵循轮流落子规则，当大宝下子后，轮到小宝落子，依次交替进行，保证游戏的公平性和秩序性。</li>
+<li>获胜条件：游戏目标是使己方的四颗棋子在一条直线上，这条直线可以是斜线、竖线或横线。率先达成此条件的一方获胜，明确的获胜规则增加了游戏的竞技性和挑战性。</li>
+<li>催促功能：在一方未落子前，另一方可以进行催促，增加游戏的互动性和紧张感，让游戏节奏更加紧凑。</li>
+<li>音效反馈：在玩家落子、催促或者获胜时，播放相应的音效。比如落子时有清脆的音效，催促时有独特的提示音，获胜时有欢快的庆祝音乐，增强游戏的沉浸感和趣味性。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏10：数字消消乐游戏</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/happy_voc​">数字消消乐游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>强化数字认知：帮助小朋友熟悉从 0 - 100 的数字形态、读音，在反复识别和消除相同数字的过程中，加深对数字的记忆和理解，提升数字认知能力。</li>
+<li>锻炼观察力：游戏中需要小朋友仔细观察众多数字方块，找出相同的数字进行消除，这有助于锻炼他们的观察力和注意力，培养细心、专注的品质。</li>
+<li>培养反应能力：随着游戏进程推进，小朋友需要快速做出判断和选择，点击相同数字进行消除，长期训练能提升他们的反应速度和手眼协调能力。</li>
+<li>增强自信心：每成功消除一对数字，游戏会给予 “你真棒” 的提示音反馈，让小朋友获得成就感，随着游戏的深入和完成度提高，不断增强他们的自信心和学习积极性。</li>
+<li>激发学习兴趣：将数字学习融入有趣的消消乐游戏形式，搭配欢愉的背景音乐和小宝录制的发音，改变枯燥的学习方式，让小朋友在轻松愉快的氛围中主动学习数字知识。
+*</li>
+</ul>
+</li>
+<li><strong>游戏功能</strong>：<ul>
+<li>背景音乐：运行程序后，自动播放欢愉的背景音乐，营造轻松愉悦的游戏氛围，让小朋友在舒适的环境中享受游戏和学习过程。</li>
+<li>数字发音：当玩家选中两个相同的数字，会播放由小宝录制的对应数字发音，帮助小朋友将数字的视觉形象和听觉发音紧密联系起来，强化记忆。</li>
+<li>方块振动效果：选中相同数字后，两个数字方块会振动，这种动态反馈不仅增加了游戏的趣味性和互动感，还能让小朋友更直观地感受到操作的结果，提升游戏体验。</li>
+<li>提示音鼓励：每次成功消除一对数字，都会发出 “你真棒” 或是“答对啦”等提示音，对小朋友的正确操作给予即时鼓励，增强他们的自信心和继续游戏的动力。</li>
+<li>游戏进程：持续进行数字消除操作，直到消完最后一对数字，游戏结束。这种明确的游戏目标和进程设置，让小朋友有清晰的方向感，在不断挑战中完成数字学习任务。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏11：愤怒的小鸟</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/funny_bird/tree/master​">数字消消乐游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>娱乐休闲：复刻抖音愤怒的小鸟游戏，提供一款趣味性十足的休闲游戏，让小朋友们在闲暇时光能够放松身心，享受游戏带来的快乐。</li>
+<li>锻炼反应能力：在游戏过程中，玩家需要通过按空格键及时控制小鸟上下移动来躲避水管，这有助于锻炼玩家的反应速度和手眼协调能力，提升对突发情况的应对能力。</li>
+<li>挑战自我：设置得分机制，鼓励玩家不断挑战自己，追求更高的分数，在一次次的尝试中突破自我，增强自信心和成就感。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li>操作控制：进入游戏后，玩家通过按空格键控制小鸟上下移动。按下空格键时，小鸟向上飞起；松开空格键，小鸟则因重力作用下落。这种简单的操作方式，易于上手，适合不同年龄段的玩家。</li>
+<li>障碍躲避：游戏场景中会不断出现上下排列的水管，水管的间距和出现频率随机变化，增加游戏的难度和挑战性。玩家需要精准操作小鸟，使其巧妙躲避这些水管，避免碰撞。</li>
+<li>游戏结束判定：当小鸟碰到水管时，游戏立即结束，屏幕上会显示最终得分和游戏结果，玩家可以选择重新开始游戏或者退出。</li>
+<li>得分机制：每当小鸟成功跨过一组水管，玩家的得分就会增加。得分可以实时显示在游戏界面上，让玩家随时了解自己的游戏进度和成绩，激励玩家不断挑战更高分数 。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏12：“植物大战僵尸 - 识字版”</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/LearnCC​">数字消消乐游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>以趣味游戏形式，让玩家尤其是儿童在轻松愉快的氛围中学习汉字，降低学习汉字的枯燥感，提升学习积极性。</li>
+<li>通过简化版的植物大战僵尸游戏场景和玩法，增强玩家的记忆力、反应能力以及手眼协调能力，在游戏过程中培养专注力。</li>
+<li>以游戏通关，星星奖励与游戏结束激励机制，激发玩家的竞争意识和挑战精神，促使他们不断提升汉字学习效果，积累更多的汉字知识。</li>
+<li>帮助玩家将汉字学习与游戏体验紧密结合，形成长期记忆，让玩家在日常生活中也能更快速、准确地识别和运用所学汉字。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li>总菜单模式<ul>
+<li>学习模式：<ul>
+<li>汉字发音：玩家进入学习模式后，点击喇叭图标，可听到对应汉字的标准发音，帮助玩家准确掌握汉字读音。</li>
+<li>汉字切换：通过点击 “上一个”“下一个” 按钮，能顺序浏览不同的汉字，方便玩家有针对性地学习特定汉字或进行系统学习。此模式专注于汉字学习，为玩家提供一个安静、无压力的学习环境。</li>
+</ul>
+</li>
+<li>娱乐模式：<ul>
+<li>背景音乐：进入娱乐模式，熟悉的植物大战僵尸背景音乐响起，营造紧张刺激的游戏氛围，增强游戏的沉浸感。</li>
+<li>关卡挑战：娱乐模式设有多个关卡，每个关卡开始时会显示一个汉字，2秒后该汉字消失。随后出现三个僵尸，每个僵尸举着不同的汉字，其中只有一个是正确答案。玩家操控发射小能手上下移动，发射子弹击中正确僵尸所举的汉字。</li>
+<li>学习与推进：每次击中正确的汉字，不仅会得分，还会触发下一个汉字的显示，继续游戏进程。每关需要完成 7 个汉字的识别挑战。</li>
+<li>星星奖励与游戏结束：每关初始有三颗星，打错一次会掉一颗星。当星星全部掉完或者僵尸走到屏幕最前面时，游戏结束。玩家可以根据获得的星星数量评估自己的游戏表现，也可通过不断挑战提升成绩，激发学习动力。</li>
+</ul>
+</li>
+<li>退出按钮：在总菜单界面，点击退出按钮可随时安全退出游戏，方便玩家在需要时结束游戏进程。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>游戏13：“红伞伞” 游戏</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/funny_mushroom/tree/dev​">“红伞伞” 游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>借鉴抖音热门接蘑菇小游戏的形式，为玩家带来轻松有趣的游戏体验。</li>
+<li>以寓教于乐的方式，让小朋友认识到红蘑菇不能吃，增强他们的生活常识和安全意识。</li>
+<li>通过操控角色接蘑菇的过程，锻炼小朋友的反应能力和手眼协调能力，提升他们的注意力和操作精准度。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li>背景音乐：游戏启动后，自动播放背景音乐，营造轻松愉快的游戏氛围，增加游戏的趣味性和沉浸感。</li>
+<li>蘑菇掉落机制：红蘑菇和白蘑菇会从屏幕上方随机位置向下掉落，掉落速度适中，保证游戏具有一定挑战性的同时，也给予小朋友足够的反应时间。</li>
+<li>角色操控：玩家操控举着篮子的小男孩，通过键盘上的方向键（上下左右）控制小男孩移动，使其能够在屏幕范围内灵活移动，去接住掉落的蘑菇。</li>
+<li>得分与游戏结束：小男孩接到白蘑菇时，采蘑菇的个数会增加1，激励玩家继续游戏；一旦接到红蘑菇，游戏立即结束。</li>
+<li>游戏界面显示：游戏界面上会实时显示采蘑菇的个数，让玩家随时了解自己的游戏成果。此外，游戏中还添加了一些装饰元素，如草地等背景图案，使游戏画面更加生动形象，吸引小朋友的注意力。</li>
+</ul>
+</li>
+</ul>
+<h2>游戏14：水果秀游戏</h2>
+<ul>
+<li>
+<p><strong>仓库地址</strong>：<a href="https://gitee.com/python4fun/fruit_show​">水果秀游戏</a></p>
+</li>
+<li>
+<p><strong>游戏介绍视频</strong>：<a href="https://gitee.com/python4fun/three2_sample_word_game">点击此处跳转</a></p>
+</li>
+<li>
+<p><strong>游戏目的</strong>：</p>
+<ul>
+<li>专为 2 - 5 岁小朋友设计，锻炼他们对数字的反应速度。</li>
+<li>借助亲子创作的素材，增加游戏亲切感与趣味性，提供寓教于乐的数字学习方式。</li>
+</ul>
+</li>
+<li>
+<p><strong>游戏功能</strong>：</p>
+<ul>
+<li>初始界面：进入游戏界面能看到大宝、小宝和猫姐的卡通形象，点击 “游戏开始” 即可进入游戏。</li>
+<li>学习环节：游戏界面的树上会展示水果，同时播放其英文发音，2秒后水果消失。</li>
+<li>答题机制：小朋友需点击与水果数量对应的正确数字。答对提示 “你真棒”，爱心进度条加1；答错提示 “要加油哦”，答错进度条加1。</li>
+<li>游戏结束：当答错进度条累计到20分时，游戏结束。</li>
+<li>素材特色：游戏中的发音由小朋友录制，图片也是小朋友的卡通形象。</li>
+</ul>
+</li>
+</ul></div>
+<div class="chapter" id="chapter2">
+
+
+
+
+<h1>第2章：写在最后</h1>
+<ol>
+<li>
+<p>亲爱的家长和小朋友们，这个精心打造的游戏集合，旨在为孩子们开辟一条充满趣味与收获的成长之路。所有游戏均可免费下载，让孩子们随时随地畅享学习与游戏融合的快乐。</p>
+</li>
+<li>
+<p>如果在下载、安装或游戏过程中，大家遇到任何疑问，或者希望进一步了解游戏背后的设计思路、教育理念，欢迎添加我的微信。只需一杯奶茶钱，我将为您提供专业、贴心的答疑解惑服务，确保孩子们能够顺利沉浸在游戏的奇妙世界中，充分发挥游戏的教育价值。</p>
+<p>期待与您在微信（maojie20210606）中交流，一同见证孩子们在游戏中快乐成长。</p>
+</li>
+</ol></div>
+<!--            <div class="chapter" id="chapter3">-->
+<!--                <h2>第3章：排序算法</h2>-->
+<!--                <p>排序算法用于将数据按照一定顺序排列。常见的排序算法包括冒泡排序、快速排序和归并排序。</p>-->
+<!--                <p>以下是一个简单的冒泡排序实现：</p>-->
+<!--                <div class="code-block">-->
+<!--                    <pre><code class="python">-->
+<!--def bubble_sort(arr):-->
+<!--    n = len(arr)-->
+<!--    for i in range(n):-->
+<!--        for j in range(0, n-i-1):-->
+<!--            if arr[j] > arr[j+1]):-->
+<!--                arr[j], arr[j+1] = arr[j+1], arr[j]-->
+<!--                    </code></pre>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="chapter" id="chapter4">-->
+<!--                <h2>4.1 图算法</h2>-->
+<!--                <p>图算法用于解决图结构中的问题，例如最短路径、最小生成树等。</p>-->
+<!--                <p>以下是一个简单的深度优先搜索（DFS）实现：</p>-->
+<!--                <div class="code-block">-->
+<!--                    <pre><code class="python">-->
+<!--def dfs(graph, node, visited):-->
+<!--    if node not in visited:-->
+<!--        visited.add(node)-->
+<!--        for neighbor in graph[node]:-->
+<!--            dfs(graph, neighbor, visited)-->
+<!--                    </code></pre>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="chapter" id="chapter5">-->
+<!--                <h2>5.1 动态规划</h2>-->
+<!--                <p>动态规划是一种通过将问题分解为子问题并存储其结果来提高效率的算法设计方法。</p>-->
+<!--                <p>以下是一个计算斐波那契数列的动态规划实现：</p>-->
+<!--                <div class="code-block">-->
+<!--                    <pre><code class="python">-->
+<!--def fibonacci_dp(n):-->
+<!--    dp = [0, 1]-->
+<!--    for i in range(2, n+1):-->
+<!--        dp.append(dp[i-1] + dp[i-2])-->
+<!--    return dp[n]-->
+<!--                    </code></pre>-->
+<!--                </div>-->
+<!--            </div>-->
+<div class="footer">
+<p>版权所有 © 2025 猫姐</p>
+<!-- <p>Powered by <a href="#"></a></p> -->
+</div>
+</div>
+</div>
+</body>
+</html>

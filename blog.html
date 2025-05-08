@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猫姐的游戏仓库</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column; /* Change to column layout for banner */
+            font-family: 'Noto Sans', sans-serif;
+            max-width: 100%; /* Use full width */
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-color: #ffffff;
+            color: #333333;
+            overflow-x: hidden; /* Prevent horizontal scrolling issues */
+        }
+        .header {
+            text-align: left;
+            margin: 5px 0;
+            padding: 10px 0;
+            border-bottom: 2px solid #4CAF50;
+            margin-left: -40px; /* Add left margin */
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            color: #4CAF50;
+        }
+        .header p {
+            font-size: 2rem;
+            color: #666666;
+        }
+        .chapter {
+            margin: 20px 0px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            scroll-margin-top: 60px; /* Offset to account for the height of the sticky top-nav */
+            margin-left: 20px; /* Add left margin */
+        }
+        .chapter h2 {
+             margin-top: 0px;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        .chapter pre code {
+            font-size: 1.2rem;
+            border-radius: 5px;
+    }
+        .code-block {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            border: 1px solid #dddddd;
+        }
+        .math-formula {
+            text-align: center;
+            margin: 20px 0;
+            font-style: italic;
+            color: #555555;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 5px;
+            border: 1px solid #dddddd;
+        }
+        .footer {
+            text-align: center;
+            padding: 0px 0; /* Reduce padding to make the footer height smaller */
+            background-color: #1a1919; /* Match footer to banner */
+            color: #ffffff;
+            font-size: 0.9rem;
+            position: fixed; /* Make it fixed */
+            bottom: 0; /* Stick to the bottom of the viewport */
+            left: 0; /* Align with the left edge */
+            width: 100%; /* Ensure it spans the full width */
+            z-index: 1200; /* Ensure it stays above the sidebar */
+        }
+        .footer a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .sidebar {
+            width: 220px; /* Slightly wider sidebar */
+            background-color: #e3f9da; /* Very light orange for the sidebar background */
+            color: #0000FF; /* Blue for the sidebar text */
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed; /* Make the sidebar fixed */
+            top: 0; /* Stick to the top of the viewport */
+            left: 0; /* Stick to the left of the viewport */
+            z-index: 1000; /* Ensure it stays below the footer */
+        }
+        .sidebar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #69040b; /* Blue for the underline */
+            padding-bottom: 5px;
+            color: #8B0000; /* Deep red for "目录" */
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 20px 0 0; /* Add top padding to avoid overlap with the sticky top-nav */
+        }
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            color: #000000; /* Black for the links */
+            font-weight: bold; /* Make the links bold */
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+        .sidebar ul li a.active {
+            color: #7f08a4; /* Blue for the active link */
+        }
+        .content {
+            flex: 1; /* Take up remaining space */
+            padding: 20px;  
+            max-width: calc(100% - 250px); /* Adjust for sidebar width */
+            margin-top: 5px; /* Add margin to avoid overlap with the sticky top-nav */
+            margin-left: 270px; /* Adjust for the fixed sidebar width */
+            padding-bottom: 50px; /* Add padding to avoid content being hidden behind the fixed footer */
+        }
+        .top-nav {
+            text-align: left;
+            font-size: 1.20rem; /* Smaller font size */
+            font-weight: bold;
+            padding: 5px 20px; /* Minimized top and bottom padding */
+            background-color: #302f2f; /* Black background */
+            color: #f3f997; /* White text */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Ensure it spans the full width */
+            position: fixed; /* Ensure it remains sticky */
+            top: 0; /* Stick to the top of the viewport */
+            z-index: 1100; /* Ensure it stays above the sidebar */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-icon {
+            position: relative;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        .menu-icon div {
+            width: 25px;
+            height: 3px;
+            background-color: #f3f997;
+            margin: 4px 10px;
+        }
+        .qr-code {
+            position: fixed; /* Center in the viewport */
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust for true center */
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1300; /* Ensure it stays above all other elements */
+        }
+        .qr-code img {
+            display: block; /* Ensure the image is fully visible */
+            width: auto; /* Use the image's original width */
+            height: auto; /* Use the image's original height */
+            max-width: none; /* Remove any max-width restrictions */
+        }
+        .menu-icon:hover .qr-code {
+            display: flex;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+    </style>
+    <!-- 数学公式渲染 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebarLinks = document.querySelectorAll(".sidebar ul li a");
+            sidebarLinks.forEach(link => {
+                link.addEventListener("click", function () {
+                    // Remove 'active' class from all links
+                    sidebarLinks.forEach(l => l.classList.remove("active"));
+                    // Add 'active' class to the clicked link
+                    this.classList.add("active");
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="top-nav">
+        猫姐的游戏仓库
+        <div class="menu-icon">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div class="qr-code">
+                <img src="./douyin.png" alt="QR Code">
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="#chapter0">第0章：为什么写这些游戏</a></li>
+                <li><a href="#chapter1">第1章：这些年写过的游戏集合</a></li>
+                <li><a href="#chapter2">第2章：写在最后</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="header">
+                <!-- <h1>源起</h1> -->
+                <!-- <p>Chapter 1 算法基础</p> -->
+            </div>
+            <div class="chapter" id="chapter0">
+                <h2>第0章：为什么这与这些游戏</h2>
+                <p>算法是解决问题的一系列明确步骤。例如，计算斐波那契数列的算法可以表示为：</p>
+
+            </div>
+            <div class="chapter" id="chapter1">
+                <h2>第1章：这些年写过的游戏集合</h2>
+                <p>算法是解决问题的一系列明确步骤。例如，计算斐波那契数列的算法可以表示为：</p>
+
+                <div class="code-block">
+                    <pre><code class="python">
+<!--def fibonacci(n):-->
+<!--    if n <= 1:-->
+<!--        return n-->
+<!--    return fibonacci(n-1) + fibonacci(n-2)-->
+                    </code></pre>
+                </div>
+
+                <div class="math-formula">
+<!--                   斐波那契数列的通项公式为：<br>-->
+<!--                    \[ F(n) = \frac{\phi^n - \psi^n}{\sqrt{5}} \]-->
+<!--                    其中 \(\phi = \frac{1+\sqrt{5}}{2}\) 是黄金分割比。-->
+                </div>
+
+                <img src="https://via.placeholder.com/600x300?text=算法流程图" alt="算法流程图">
+            </div>
+
+            <div class="chapter" id="chapter2">
+                <h2>写在最后</h2>
+                <p>数据结构是组织和存储数据的方式。常见的数据结构包括数组、链表、栈、队列、树和图。</p>
+                <p>例如，以下是一个简单的栈操作：</p>
+                <div class="code-block">
+                    <pre><code class="python">
+stack = []
+stack.append(1)
+stack.append(2)
+print(stack.pop())  # 输出: 2
+                    </code></pre>
+                </div>
+            </div>
+
+<!--            <div class="chapter" id="chapter3">-->
+<!--                <h2>第3章：排序算法</h2>-->
+<!--                <p>排序算法用于将数据按照一定顺序排列。常见的排序算法包括冒泡排序、快速排序和归并排序。</p>-->
+<!--                <p>以下是一个简单的冒泡排序实现：</p>-->
+<!--                <div class="code-block">-->
+<!--                    <pre><code class="python">-->
+<!--def bubble_sort(arr):-->
+<!--    n = len(arr)-->
+<!--    for i in range(n):-->
+<!--        for j in range(0, n-i-1):-->
+<!--            if arr[j] > arr[j+1]):-->
+<!--                arr[j], arr[j+1] = arr[j+1], arr[j]-->
+<!--                    </code></pre>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="chapter" id="chapter4">-->
+<!--                <h2>4.1 图算法</h2>-->
+<!--                <p>图算法用于解决图结构中的问题，例如最短路径、最小生成树等。</p>-->
+<!--                <p>以下是一个简单的深度优先搜索（DFS）实现：</p>-->
+<!--                <div class="code-block">-->
+<!--                    <pre><code class="python">-->
+<!--def dfs(graph, node, visited):-->
+<!--    if node not in visited:-->
+<!--        visited.add(node)-->
+<!--        for neighbor in graph[node]:-->
+<!--            dfs(graph, neighbor, visited)-->
+<!--                    </code></pre>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="chapter" id="chapter5">-->
+<!--                <h2>5.1 动态规划</h2>-->
+<!--                <p>动态规划是一种通过将问题分解为子问题并存储其结果来提高效率的算法设计方法。</p>-->
+<!--                <p>以下是一个计算斐波那契数列的动态规划实现：</p>-->
+<!--                <div class="code-block">-->
+<!--                    <pre><code class="python">-->
+<!--def fibonacci_dp(n):-->
+<!--    dp = [0, 1]-->
+<!--    for i in range(2, n+1):-->
+<!--        dp.append(dp[i-1] + dp[i-2])-->
+<!--    return dp[n]-->
+<!--                    </code></pre>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="footer">
+                <p>版权所有 © 2025 猫姐</p>
+                <!-- <p>Powered by <a href="#"></a></p> -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
