@@ -1,0 +1,17 @@
+name: Auto Deploy
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 */1 * * *'  # 每 3 小时强制刷新
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Force Deploy
+        run: |
+          git config --global user.name "gpht"
+          git config --global user.email "424277539qq"
+          git commit --allow-empty -m "Scheduled redeploy"
+          git push origin main
